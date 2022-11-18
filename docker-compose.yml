@@ -1,0 +1,11 @@
+version: "3.6"
+services:
+    svelte-app:
+        build: ./
+        ports:
+            - "80:80"
+        volumes:
+            - react_app_data:/usr/src/app
+volumes:
+    react_app_data:
+        driver: local
