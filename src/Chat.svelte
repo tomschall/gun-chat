@@ -6,7 +6,7 @@
 	import debounce from "lodash.debounce"
 
 	import GUN from "gun"
-	const db = GUN("https://gun-node-peer.herokuapp.com/gun")
+	const db = GUN(["https://gun-manhattan.herokuapp.com/gun"])
 
 	let newMessage
 	let messages = []
