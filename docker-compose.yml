@@ -4,10 +4,7 @@ services:
         build: ./
         ports:
             - "80:80"
-        volumes:
-            - react_app_data:/usr/src/app
-        environment:
-            - PORT=80
+            - "5000:5000"
 volumes:
     react_app_data:
         driver: local

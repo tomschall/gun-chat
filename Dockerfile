@@ -1,5 +1,15 @@
-FROM nginx
-COPY ./public /usr/share/nginx/html
-COPY ./nginx /nginx
-EXPOSE 80
-CMD /bin/sh -c "envsubst '\$PORT' < /nginx/nginx.conf.template > /etc/nginx/conf.d/nginx.conf" && nginx -g 'daemon off;'
+# Use a prebuilt node image
+FROM node:16.13.2-alpine3.15
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the package.json file that contains all the dependencies to the container
+
+COPY ./express/ /app
+COPY ./public/ /app/public
+
+RUN npm install
+
+# Start the server
+CMD node server.js --bind 0.0.0.0:$PORT
