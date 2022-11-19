@@ -6,7 +6,7 @@
 	import debounce from "lodash.debounce"
 
 	import GUN from "gun"
-	const db = GUN(["https://gun-manhattan.herokuapp.com/gun"])
+	const db = GUN("https://gun-node-peer.herokuapp.com/gun")
 
 	let newMessage
 	let messages = []
@@ -43,7 +43,7 @@
 		// Get Messages
 		db.get("chat")
 			.map(match)
-			.once(async (data, id) => {
+			.on(async (data, id) => {
 				if (data) {
 					// Key for end-to-end encryption
 					const key = "#foo"
@@ -55,10 +55,20 @@
 						when: GUN.state.is(data, "what"), // get the internal timestamp for the what property.
 					}
 
+					// console.log("message", message)
+
 					if (message.what) {
+						messages = await getUnique(
+							[...messages, message],
+							"when",
+						)
+
 						messages = [...messages.slice(-100), message].sort(
 							(a, b) => a.when - b.when,
 						)
+
+						console.log("messages", messages)
+
 						if (canAutoScroll) {
 							autoScroll()
 						} else {
@@ -68,6 +78,20 @@
 				}
 			})
 	})
+
+	async function getUnique(arr, index) {
+		const unique = arr
+			.map((e) => e[index])
+
+			// store the keys of the unique objects
+			.map((e, i, final) => final.indexOf(e) === i && i)
+
+			// eliminate the dead keys & store unique objects
+			.filter((e) => arr[e])
+			.map((e) => arr[e])
+
+		return unique
+	}
 
 	async function sendMessage() {
 		const secret = await SEA.encrypt(newMessage, "#foo")

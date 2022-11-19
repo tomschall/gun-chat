@@ -4,7 +4,7 @@ import "gun/axe"
 import { writable } from "svelte/store"
 
 // Database
-export const db = GUN(["https://gun-manhattan.herokuapp.com/gun"])
+export const db = GUN("https://gun-node-peer.herokuapp.com/gun")
 
 // Gun User
 export const user = db.user().recall({ sessionStorage: true })
